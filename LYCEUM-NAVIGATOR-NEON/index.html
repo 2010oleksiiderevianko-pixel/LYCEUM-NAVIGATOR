@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080d1c">
+<title>LYCEUM NAVIGATOR · Ліцей ім. А. Волошина</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+</head>
+<body class="light">
+<div class="app">
+<aside class="side">
+  <div class="identity"><div class="school">Ліцей ім. А. Волошина</div><div class="brand"><span class="lg">✦</span> LYCEUM<br>NAVIGATOR</div><div class="edition">NEON EDITION</div></div>
+  <nav class="menu" aria-label="Головне меню">
+    <button data-v="nav" class="on"><span>⌖</span> Навігатор</button>
+    <button data-v="map"><span>▦</span> Поверхи та схема</button>
+    <button data-v="info"><span>ⓘ</span> Інформація</button>
+    <button data-v="assistant"><span>✧</span> ШІ-помічник</button>
+    <button data-v="settings"><span>⚙</span> Налаштування</button>
+  </nav>
+  <div class="geo"><button id="geo" title="Визначити місцезнаходження" aria-label="Визначити місцезнаходження">◎</button><div id="geoSt" class="geo-st" role="status"></div></div>
+  <div class="side-foot">DEMO BUILD · v2.1</div>
+</aside>
+<main class="main">
+<header class="top"><div><div class="eyebrow">SMART CAMPUS SYSTEM</div><h1 id="pageTitle">Навігатор ліцею</h1><p id="pageDesc">Знайди потрібне приміщення та побудуй маршрут</p></div><div class="live"><i></i> СИСТЕМА ГОТОВА</div></header>
+<div class="warn" role="note"><b>Демонстраційна схема.</b> Схеми корпусів — демонстраційні; окремий коридор відтворено за твоїми двома фото. Назви, розміри й переходи потрібно перевірити на місці. Не використовуй цю схему для евакуації.</div>
+<div class="work nav" id="work">
+<section class="card" id="routeCard">
+  <div class="card-head"><div><div class="eyebrow">ROUTE BUILDER</div><h2>Побудова маршруту</h2></div><span class="pill">01 / НАВІГАЦІЯ</span></div>
+  <label>Звідки?<input id="qa" list="ls" placeholder="Наприклад, 1-01 або Сходи 1" autocomplete="off"></label>
+  <div class="swap-row"><span>ТОЧКА ВІДПРАВЛЕННЯ</span><button id="swap" class="swap" title="Поміняти місцями" aria-label="Поміняти місцями">⇅</button></div>
+  <label>Куди?<input id="qb" list="ls" placeholder="Введіть кабінет або приміщення" autocomplete="off"></label>
+  <button id="go" class="go">ПОБУДУВАТИ МАРШРУТ <span>→</span></button>
+  <button id="clr" class="ghost">Очистити маршрут</button>
+  <div id="rmsg" class="rmsg" role="status"></div><ol id="steps" class="steps"></ol>
+</section>
+<section class="card map-card" id="mapCard">
+  <div class="mtop"><div><div class="eyebrow">INTERACTIVE FLOOR PLAN</div><h2>Схема ліцею</h2></div><div class="flab" id="flab"></div></div>
+  <div class="chips" id="bchips"></div>
+  <div class="mapwrap"><svg id="svg" role="img" aria-label="Демонстраційна схема поверху"></svg>
+    <div class="fl"><button id="zoomIn" title="Збільшити">+</button><button id="zoomOut" title="Зменшити">−</button><button id="zoomReset" title="Скинути масштаб">↺</button><span class="zoom-help">Перетягуй схему · коліщатко для масштабу</span></div>
+    <div class="floor-nav"><button id="fPrev" title="На нижній поверх" aria-label="На нижній поверх">↓</button><button id="fNext" title="На вищий поверх" aria-label="На вищий поверх">↑</button></div>
+  </div>
+  <div id="rinfo" class="rinfo" hidden></div>
+  <div class="photo-orient"><div class="photo-orient-head"><b>Фотографічні орієнтири</b><span>два ракурси одного коридору</span></div><div class="photo-grid"><figure><img src="assets/corridor-rest-area.jpg" alt="Коридор із зоною відпочинку, синьою лавкою та жовтими пуфами"><figcaption>У бік зони відпочинку</figcaption></figure><figure><img src="assets/corridor-lockers-doors.jpg" alt="Коридор із шафками та дверима в дальньому кінці"><figcaption>У бік дверей та шафок</figcaption></figure></div><p class="photo-note">Схема умовна: фото показують орієнтири, але не дають точних розмірів чи розташування всіх дверей.</p></div>
+  <div class="legend"><span><i class="start"></i>початок</span><span><i class="finish"></i>кінець / вихід</span><span><i class="stairs"></i>сходи</span><span>пунктир — не підтверджено</span></div>
+</section>
+<section class="card full" id="infoView" hidden><div class="eyebrow">CAMPUS DIRECTORY</div><h2>Інформація</h2>
+<p>LYCEUM NAVIGATOR — демонстраційний внутрішній навігатор Ліцею ім. А. Волошина. Схеми корпусів А/Б (1–4 поверхи), В, Г, Е (1 поверх) створені за попередніми демонстраційними даними. Окремий коридор відтворено за двома наданими фотографіями. Офіційні евакуаційні маршрути тут не відтворюються.</p>
+<h2>Що потрібно уточнити</h2><ul id="open"></ul><h2>Усі приміщення</h2><input id="flt" placeholder="Пошук за номером або назвою"><div id="rooms" class="room-list"></div></section>
+<section class="card full assistant-view" id="assistantView" hidden>
+  <div class="jarvis-head"><div><div class="eyebrow">PERSONAL AI SYSTEM · J.A.R.V.I.S.</div><h2>JARVIS <span class="jarvis-sub">LYCEUM INTELLIGENCE</span></h2></div><div class="jarvis-state" id="jarvisState"><i></i><span>ПЕРЕВІРКА СИСТЕМИ</span></div></div>
+  <p class="muted">Голосовий ШІ-помічник із доступом до функцій навігатора та контексту розмови.</p>
+  <div class="jarvis-orb" id="jarvisOrb"><div class="orb-core">J</div></div>
+  <div class="chat" id="chatLog" aria-live="polite"><div class="chat-msg bot">Систему JARVIS ініціалізовано. Привіт! Я можу спілкуватися, допомагати з навчанням і керувати навігатором. Для роботи справжньої ШІ-моделі потрібен серверний API-ключ.</div></div>
+  <form id="chatForm" class="chat-form"><input id="chatInput" autocomplete="off" maxlength="2000" placeholder="Скажи або напиши команду JARVIS…" aria-label="Повідомлення помічнику"><button class="go" type="submit">НАДІСЛАТИ →</button></form>
+  <div class="jarvis-controls"><button type="button" id="jarvisMic" class="jarvis-control">🎙 ГОЛОСОВИЙ ВВІД</button><button type="button" id="jarvisVoice" class="jarvis-control on">🔊 ОЗВУЧЕННЯ УВІМКНЕНО</button><button type="button" id="jarvisClear" class="jarvis-control">ОЧИСТИТИ ДІАЛОГ</button></div>
+  <div class="jarvis-note" id="jarvisNote">Підключення до серверу…</div>
+  <div class="chat-hints"><button type="button" data-prompt="Як побудувати маршрут?">Як побудувати маршрут?</button><button type="button" data-prompt="Як працює QR-код?">Як працює QR-код?</button><button type="button" data-prompt="Що вміє навігатор?">Що вміє навігатор?</button></div>
+</section>
+<section class="card full" id="settingsView" hidden><div class="eyebrow">PERSONALIZATION</div><h2>Налаштування</h2>
+<div class="setting"><div><b>Тема інтерфейсу</b><small>Вибери вигляд навігатора</small></div><select id="theme"><option value="light">Google Maps Light</option><option value="dark">Neon Dark</option></select></div>
+<div class="setting"><div><b>Анімація маршруту</b><small>Рухомий ефект лінії маршруту</small></div><label class="switch"><input type="checkbox" id="motion" checked><span></span></label></div>
+<div class="setting"><div><b>Масштаб схеми</b><small>Повернути початковий вигляд</small></div><button id="resetMap" class="small-btn">Скинути</button></div>
+<h2>QR-код сторінки</h2><p class="muted">На опублікованому сайті QR-код відкриватиме його адресу. Для локальної версії буде створено QR-код localhost, доступний лише у відповідному локальному середовищі.</p><button id="makeQR" class="small-btn">Створити QR-код</button><div id="qr" class="qr"></div><div id="qrStatus" class="muted"></div>
+</section>
+</div>
+<footer>LYCEUM NAVIGATOR <span>·</span> DEMONSTRATION PROJECT <span>·</span> НЕОФІЦІЙНА СХЕМА</footer>
+</main>
+</div>
+<datalist id="ls"></datalist>
+<script src="js/data.js"></script><script src="js/engine.js"></script><script src="js/map.js"></script><script src="js/assistant.js"></script><script src="js/app.js"></script>
+</body></html>
